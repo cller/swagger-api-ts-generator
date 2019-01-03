@@ -15,6 +15,7 @@ generator.apiFile$.subscribe();
 
 commander
   .version(version)
+  .name('swagger-api-ts-generator')
   .arguments('<uri>')
   .option('-o, --output [dir], default', 'Api output dir, default: "./api"')
   .action((uri: string, options) => {
