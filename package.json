@@ -18,9 +18,6 @@
   "bugs": {
     "url": "https://github.com/cller/swagger-api-ts-generator/issues"
   },
-  "bin": {
-    "swagger-api-ts-generator": "./src/index.js"
-  },
   "homepage": "https://github.com/cller/swagger-api-ts-generator#readme",
   "dependencies": {
     "commander": "^2.19.0",
