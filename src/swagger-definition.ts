@@ -1,4 +1,4 @@
-import { SwaggerProperty } from "./swagger-property";
+import { SwaggerProperty } from './swagger-property';
 
 export interface SwaggerDefinition {
     /**

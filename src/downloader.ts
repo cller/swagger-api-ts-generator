@@ -1,33 +1,37 @@
 
-import { Observable, Subject, from, AsyncSubject, BehaviorSubject } from "rxjs";
-import { mergeMap, map, zip } from "rxjs/operators";
-import { Swagger } from "./swagger";
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
+import { from, Observable, Subject, empty } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
+import { Swagger } from './swagger';
 export class Downloader {
 
-    private subject = new BehaviorSubject<string>('');
+  /**
+   * 观察api数据
+   */
+  public api$: Observable<Swagger>;
 
-    /**
-     * 观察api数据
-     */
-    api$: Observable<Swagger>;
+  private subject = new Subject<string>();
 
-    constructor() {
-        this.api$ = this.subject.asObservable().pipe(
-            mergeMap(uri => {
-                return from(fetch(uri));
-            }),
-            mergeMap(resp => {
-                return from(resp.json());
-            }),
-            map(body => {
-                return body;
-            })
-        );
-    }
+  constructor() {
+    this.api$ = this.subject.asObservable().pipe(
+      mergeMap((uri) => {
+        return from(fetch(uri));
+      }),
+      mergeMap((resp) => {
+        return from(resp.json());
+      }),
+      map((body) => {
+        return body;
+      }),
+      catchError((error) => {
+        console.log(error);
+        return empty();
+      })
+    );
+  }
 
-    donwload(uri: string) {
-        this.subject.next(uri);
-    }
+  public donwload(uri: string) {
+    this.subject.next(uri);
+  }
 
 }

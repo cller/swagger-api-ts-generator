@@ -1,4 +1,4 @@
-import { SwaggerDefinition } from "./swagger-definition";
+import { SwaggerDefinition } from './swagger-definition';
 
 export interface Swagger {
     info: {
