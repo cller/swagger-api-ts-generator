@@ -23,6 +23,18 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "启动程序-help",
+      "program": "${workspaceFolder}\\src\\index.js",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ],
+      "args": [],
+      "preLaunchTask": "build"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "启动程序-xiangyao",
       "program": "${workspaceFolder}\\src\\index.js",
       "sourceMaps": true,
