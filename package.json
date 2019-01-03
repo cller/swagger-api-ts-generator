@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/cller/swagger-api-ts-generator.git"
   },
-  "keywords": [],
+  "keywords": [ "swagger", "typescript", "api", "generate", "generator" ],
   "author": "",
   "license": "ISC",
   "bugs": {
