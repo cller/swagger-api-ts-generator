@@ -45,9 +45,7 @@ export class Generator {
 
         if (genericTypeString) {
             genericTypes.push(
-                ...genericTypeString
-                    .split(/[<,>]/)
-                    .filter(item => item)
+                genericTypeString
             );
         }
 
@@ -103,9 +101,13 @@ export class Generator {
                 return `Array<${this.generateType(property.items.type, property, null)}>`;
             }
         } else if (isNullOrUndefined(name) && property && property.$ref) {
-            const itemsTypeName = this.generateRefType(property.$ref);
+            let itemsTypeName = this.generateRefType(property.$ref);
             if (imports) {
-                this.appendImport(imports, itemsTypeName);
+                if (genericTypes && genericTypes.includes(itemsTypeName)) {
+                    itemsTypeName = `T${genericTypes.indexOf(itemsTypeName)}`;
+                } else {
+                    this.appendImport(imports, itemsTypeName);
+                }
             }
             return `${itemsTypeName}`;
         } else if (isString(name)) {
@@ -208,6 +210,7 @@ export class Generator {
                         const definitions = new Array<SwaggerDefinition>();
                         Object.keys(api.definitions)
                             .filter((key) => !/^(Map|List)«[\s\S]*»$/g.test(key))
+                            // .filter(key => key === 'HttpResponse«Page«Version»»')
                             .forEach((key) => {
                                 console.log(key);
                                 definitions.push(api.definitions[key]);
@@ -215,6 +218,7 @@ export class Generator {
                         return from(definitions).pipe(
                             // filter(definition => definition.title === 'HomeDeviceTrendRes'),
                             map((definition) => {
+                                console.log(`genearate ${definition.title} ...`)
                                 const content = this.generateInterface(definition);
                                 const filename = this.generateInterfaceFileName(this.generateType(definition.title));
                                 return [
@@ -224,21 +228,14 @@ export class Generator {
                             }),
                         );
                     }),
-                    // filter(([, outputPath]) => {
-                    //     console.log(outputPath);
-                    //     return [
-                    //         './api/api-sort.ts',
-                    //         './api/api-page.ts',
-                    //         './api/api-bank-card-res.ts',
-                    //         './api/api-withdraw-apply-audit-list-res.ts',
-                    //         './api/api-withdraw-audit-res.ts'
-                    //     ].includes(outputPath)
-                    // }),
                     tap(([content, outputPath]) => {
                         if (!existsSync(output)) {
                             mkdirSync(output);
                         }
+                        console.log(`write ${outputPath} ...`)
                         writeFileSync(outputPath, content);
+                        console.log(`${content}`);
+                        console.log(`=====================================ok=====================================`);
                     })
                 );
             }),

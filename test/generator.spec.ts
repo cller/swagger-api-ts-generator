@@ -23,4 +23,23 @@ describe('Generator', function () {
       assert.equal(generator.generateTypeName('Page«Array«object»»'), 'ApiPage<Array<object>>');
     });
   });
+
+  describe('#generateInterfaceName', () => {
+
+    it('应该装转换“HttpResponse«Page«Version»»”为“ApiHttpResponse<T0>”', () => {
+      const genericTypes = new Array<string>();
+
+      assert.equal(generator.generateInterfaceName('HttpResponse«Page«Version»»', genericTypes), 'ApiHttpResponse')
+
+      assert.deepEqual(genericTypes, ["ApiPage<ApiVersion>"]);
+    });
+
+    it('应该装转换“HttpResponse«Map«string,Version»»”为“ApiHttpResponse<T0>”', () => {
+      const genericTypes = new Array<string>();
+
+      assert.equal(generator.generateInterfaceName('HttpResponse«Map«string,Version»»', genericTypes), 'ApiHttpResponse')
+
+      assert.deepEqual(genericTypes, ["Map<string,ApiVersion>"]);
+    });
+  });
 });
